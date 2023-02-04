@@ -11,7 +11,11 @@ import tempfile
 from dagster import asset
 from dagster import FreshnessPolicy, RetryPolicy
 import pickle
+import sys
 
+if not sys.warnoptions:
+    import warnings
+    warnings.filterwarnings("ignore")
 
 def get_github_docs(repo_owner, repo_name):
     with tempfile.TemporaryDirectory() as d:
@@ -56,7 +60,7 @@ def search_index(source_docs):
         pickle.dump(FAISS.from_documents(source_chunks, OpenAIEmbeddings()), f)
 
 
-chain = load_qa_with_sources_chain(OpenAI(temperature=0))
+chain = load_qa_with_sources_chain(OpenAI(temperature=0.7))
 
 
 def print_answer(question):
